@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile   Profile?
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  nip         String?
+  teacherName String?
+  subject     String?
+  bio         String?
+  photoUrl    String?
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SchoolProfile {
+  id        String   @id @default("global-settings")
+  name      String?
+  npsn      String?
+  address   String?
+  phone     String?
+  email     String?
+  principal String?
+  logoUrl   String?
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id     String   @id @default(cuid())
+  name   String   @unique
+  materi Materi[]
+}
+
+model Materi {
+  id          String               @id @default(cuid())
+  title       String
+  content     String
+  kelas       Int
+  semester    Int
+  cp          String?
+  tp          String?
+  cpId        String?
+  categoryId  String
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  asesmen     Asesmen[]
+  category    Category             @relation(fields: [categoryId], references: [id])
+  cpRelation  CapaianPembelajaran? @relation(fields: [cpId], references: [id])
+  tpRelations TujuanPembelajaran[] @relation("MateriToTP")
+  rpp         Rpp?
+}
+
+model CapaianPembelajaran {
+  id        String               @id @default(cuid())
+  kode      String?
+  deskripsi String
+  kelas     Int?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  materi    Materi[]
+  tujuan    TujuanPembelajaran[]
+}
+
+model TujuanPembelajaran {
+  id        String              @id @default(cuid())
+  kode      String?
+  deskripsi String
+  cpId      String
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  cp        CapaianPembelajaran @relation(fields: [cpId], references: [id])
+  materi    Materi[]            @relation("MateriToTP")
+}
+
+model Asesmen {
+  id        String     @id @default(cuid())
+  title     String
+  type      String     @default("QUIZ")
+  materiId  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  materi    Materi     @relation(fields: [materiId], references: [id])
+  questions Question[]
+  results   Result[]
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  text      String
+  options   String
+  answer    String
+  type      String   @default("PILGAN")
+  asesmenId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  asesmen   Asesmen  @relation(fields: [asesmenId], references: [id])
+}
+
+model Kelas {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  tingkat   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  students  Student[]
+}
+
+model Result {
+  id         String   @id @default(cuid())
+  score      Int
+  answers    String   // JSON string of answers
+  studentId  String
+  asesmenId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  asesmen    Asesmen  @relation(fields: [asesmenId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, asesmenId])
+}
+
+model Rpp {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   // Text or JSON content
+  materiId  String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  materi    Materi   @relation(fields: [materiId], references: [id], onDelete: Cascade)
+}
+
+model Student {
+  id        String    @id @default(cuid())
+  name      String
+  nisn      String?   @unique
+  nis       String?   @unique
+  gender    String
+  pob       String?
+  dob       DateTime?
+  address   String?
+  waNumber  String?
+  kelasId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  kelas     Kelas     @relation(fields: [kelasId], references: [id])
+  results   Result[]
+}

@@ -1,0 +1,39 @@
+PANDUAN SINGKAT PENGGUNAAN MEDIA AJAR PORTABEL
+===============================================
+
+Aplikasi Media Ajar Portabel ini sangat mudah digunakan dan siap pakai tanpa perlu instalasi rumit. 
+Silakan ikuti panduan berikut:
+
+1. DOWNLOAD
+   Unduh file aplikasi dari link yang telah diberikan.
+   https://drive.google.com/drive/folders/1hTb08j3NHiJK-VsNf6uXiVKAz7ccVp4F?usp=drive_link
+
+2. EKSTRAK FILE
+   Gunakan aplikasi pengekstrak file (seperti WinRAR, 7-Zip, atau bawaan sistem) untuk mengekstrak file yang sudah diunduh. 
+   Anda bebas menyimpan folder hasil ekstrak di mana saja (misalnya di Desktop, Documents, atau Flashdisk).
+
+3. JALANKAN APLIKASI
+   Buka folder hasil ekstrak tadi, kemudian jalankan aplikasinya sesuai dengan sistem operasi Anda:
+   
+   - Untuk pengguna WINDOWS: 
+     Cukup klik ganda (double-click) pada file bernama "start_lms.bat"
+     
+   - Untuk pengguna LINUX / MacOS:
+     Buka terminal dan jalankan file bernama "start_lms.sh"
+
+Setelah dijalankan, sebuah jendela terminal/command prompt hitam akan muncul (mohon jangan ditutup selama penggunaan). 
+
+4. PERIZINAN KEAMANAN (JIKA MUNCUL PERINGATAN)
+   Saat pertama kali aplikasi dijalankan, Anda mungkin akan melihat jendela peringatan keamanan (seperti Windows Defender Firewall) yang meminta izin untuk "Node.js" atau "Node.js JavaScript Runtime".
+   - Peringatan ini muncul karena aplikasi menggunakan versi Node.js portabel (bawaan) yang membutuhkan akses untuk berjalan di jaringan lokal komputer Anda.
+   - Hal ini sangat wajar dan aman. Aplikasi hanya berjalan di komputer Anda sendiri secara luring (offline) tanpa mengambil data pribadi Anda.
+   - Silakan berikan izin dengan mencentang kotak yang tersedia (jika ada) dan klik tombol "Allow access" (Izinkan akses) atau "Yes" pada jendela peringatan tersebut agar aplikasi dapat berfungsi dengan normal.
+
+5. BUKA APLIKASI
+   Setelah memberikan izin (atau jika tidak ada peringatan), Aplikasi Media Ajar akan otomatis terbuka di browser internet Anda dengan alamat:
+
+🌐 http://localhost:3000
+
+(Jika browser tidak terbuka secara otomatis, Anda dapat membuka browser secara manual dan mengetikkan alamat di atas).
+
+Selamat menggunakan!
