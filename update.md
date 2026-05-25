@@ -1,3 +1,35 @@
+# Catatan Pembaruan (Update Log) - 25 Mei 2026
+
+Dokumen ini berisi catatan perubahan untuk mendukung migrasi deployment online aplikasi **Media Ajar Digital** ke platform **Vercel** dan database **Supabase**.
+
+---
+
+## Ringkasan Pembaruan (Versi Cloud/Online)
+
+### 1. 📂 Pemisahan Folder Khusus Vercel (`mediaajar_vercel`)
+*   **Tujuan**: Menghindari kerusakan atau perubahan pada versi offline/portabel lokal (`dev.db`).
+*   **Detail**: Membuat salinan proyek baru yang bersih dari *cache* lokal, folder `.next`, dan *database* SQLite lokal lama.
+
+### 2. 🗄️ Migrasi Database dari SQLite ke PostgreSQL (Supabase)
+*   **Berkas yang Diubah**: `prisma/schema.prisma` dan `.env`
+*   **Detail Perubahan**:
+    *   Mengubah *database provider* di Prisma dari `sqlite` ke `postgresql`.
+    *   Menambahkan dukungan `directUrl` di `schema.prisma` untuk mendukung migrasi database yang aman pada model *connection pooling* Supabase.
+    *   Mengamankan file `.env` yang berisikan kredensial database sensitif agar tidak terunggah ke repositori publik GitHub menggunakan `.gitignore`.
+
+### 3. 🔑 Penyesuaian Karakter Khusus pada Database URL (URL Encoding)
+*   **Berkas yang Diubah**: `.env`
+*   **Detail Perubahan**: Mengubah karakter khusus seperti `!` dan `#` pada password database menjadi format URL-encoded (`%21` dan `%23`) untuk mencegah kegagalan *parsing* port pada saat koneksi Prisma dijalankan.
+
+### 4. 🌱 Sinkronisasi & Pengisian Data Awal (Seed Data)
+*   **Perintah yang Dijalankan**: `npx prisma db push` dan `npx prisma db seed`
+*   **Detail**: Menginisialisasi tabel-tabel database di Supabase dan memasukkan akun admin default (`admin@science.id`) beserta kategori serta contoh materi ajar awal.
+
+### 5. 🚀 Deployment Terintegrasi di Vercel
+*   **Konfigurasi**: Menghubungkan Git ke repository GitHub `sijambronk/media-ajar-online` dan melakukan build di Vercel menggunakan *custom build command* (`npx prisma db push && npm run build`) agar database selalu sync di sisi serverless.
+
+---
+
 # Catatan Pembaruan (Update Log) - 19 Mei 2026
 
 Dokumen ini berisi catatan perubahan, perbaikan bug, dan peningkatan fitur yang telah diimplementasikan hari ini pada aplikasi **Media Ajar Digital**.
