@@ -11,6 +11,7 @@ import { TextAlign } from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
+import Youtube from "@tiptap/extension-youtube";
 import { 
   Bold, Italic, Underline as UnderlineIcon, 
   List, ListOrdered, Image as ImageIcon, 
@@ -19,7 +20,7 @@ import {
   AlignRight, AlignJustify, Type, Code, Sparkles,
   Indent as IndentIcon, Outdent as OutdentIcon,
   Baseline, Palette, Maximize, GripHorizontal,
-  Subscript as SubscriptIcon, Superscript as SuperscriptIcon
+  Subscript as SubscriptIcon, Superscript as SuperscriptIcon, Youtube as YoutubeIcon
 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import CodeBlock from "@tiptap/extension-code-block";
@@ -280,6 +281,9 @@ const ResizableImage = Image.extend({
         parseHTML: element => element.getAttribute('width'),
         renderHTML: attributes => ({ width: attributes.width }),
       },
+      allowBase64: {
+        default: true,
+      },
       align: {
         default: 'center',
         parseHTML: element => element.style.marginLeft === '0px' ? 'left' : (element.style.marginRight === '0px' ? 'right' : 'center'),
@@ -429,6 +433,17 @@ const MenuBar = ({ editor }: { editor: any }) => {
     { label: "Purple", value: "#8b5cf6" },
     { label: "White", value: "#ffffff" },
   ];
+
+  const addYoutubeVideo = () => {
+    const url = prompt('Masukkan Link YouTube:');
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+        width: 640,
+        height: 360,
+      });
+    }
+  };
 
   return (
     <div className="flex flex-wrap gap-1 p-2 border-b border-border/50 bg-secondary/30 sticky top-0 z-20">
@@ -638,6 +653,10 @@ const MenuBar = ({ editor }: { editor: any }) => {
         <ImageIcon className="h-4 w-4" />
       </button>
 
+      <button onClick={addYoutubeVideo} className="p-2 rounded hover:bg-secondary text-muted-foreground" title="Masukkan Video YouTube">
+        <YoutubeIcon className="h-4 w-4" />
+      </button>
+
       <button
         onClick={setLink}
         className={`p-2 rounded hover:bg-secondary ${editor.isActive("link") ? "text-primary bg-primary/10" : "text-muted-foreground"}`}
@@ -703,7 +722,13 @@ export default function Editor({ content, onChange, placeholder, minHeight = "40
       Link.configure({
         openOnClick: false,
       }),
+      Youtube.configure({
+        HTMLAttributes: {
+          class: 'rounded-xl w-full aspect-video border border-border shadow-lg my-8 mx-auto',
+        },
+      }),
       ResizableImage.configure({
+        allowBase64: true,
         HTMLAttributes: {
           class: 'rounded-2xl max-w-full h-auto border border-border shadow-2xl my-8 mx-auto block',
         },
