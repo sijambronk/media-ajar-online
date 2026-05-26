@@ -65,5 +65,5 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  secret: process.env.NODE_ENV === "production" ? dynamicSecret : (process.env.NEXTAUTH_SECRET || "static_dev_secret_2026"),
+  secret: process.env.NEXTAUTH_SECRET || "static_dev_secret_2026",
 };
