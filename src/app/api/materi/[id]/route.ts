@@ -55,9 +55,9 @@ export async function PATCH(
       }
     });
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Materi update error:", error);
-    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update", details: error?.message || String(error) }, { status: 500 });
   }
 }
 

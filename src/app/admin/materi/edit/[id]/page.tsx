@@ -158,10 +158,16 @@ export default function EditMateriPage({ params }: { params: Promise<{ id: strin
         router.push("/admin/materi");
         router.refresh();
       } else {
-        alert("Gagal memperbarui materi.");
+        let errorMsg = "Gagal memperbarui materi.";
+        try {
+          const errData = await res.json();
+          if (errData.error) errorMsg += `\nDetail: ${errData.error}`;
+          if (errData.details) errorMsg += `\n(${errData.details})`;
+        } catch (e) {}
+        alert(errorMsg);
       }
-    } catch (err) {
-      alert("Terjadi kesalahan.");
+    } catch (err: any) {
+      alert("Terjadi kesalahan sistem: " + err.message);
     } finally {
       setSaving(false);
     }
