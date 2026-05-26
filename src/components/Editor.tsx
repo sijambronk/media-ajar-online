@@ -20,7 +20,7 @@ import {
   AlignRight, AlignJustify, Type, Code, Sparkles,
   Indent as IndentIcon, Outdent as OutdentIcon,
   Baseline, Palette, Maximize, GripHorizontal,
-  Subscript as SubscriptIcon, Superscript as SuperscriptIcon, Youtube as YoutubeIcon
+  Subscript as SubscriptIcon, Superscript as SuperscriptIcon, Video as YoutubeIcon
 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import CodeBlock from "@tiptap/extension-code-block";
