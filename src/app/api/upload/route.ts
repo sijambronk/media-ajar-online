@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import { join } from "path";
 
 export async function POST(req: Request) {
   try {
@@ -11,21 +9,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
+    // Convert file to Base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    // Create unique filename
-    const fileExtension = file.name.split(".").pop();
-    const fileName = `${crypto.randomUUID()}.${fileExtension}`;
     
-    // Path: public/uploads/
-    const path = join(process.cwd(), "public", "uploads", fileName);
+    // Create base64 string with proper mime type
+    const mimeType = file.type || 'application/octet-stream';
+    const base64String = `data:${mimeType};base64,${buffer.toString('base64')}`;
     
-    // Save file
-    await writeFile(path, buffer);
-    
-    const publicUrl = `/uploads/${fileName}`;
-    return NextResponse.json({ url: publicUrl });
+    // Return base64 string as URL so it can be saved in the database
+    return NextResponse.json({ url: base64String });
 
   } catch (error) {
     console.error("Upload error:", error);
