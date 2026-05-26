@@ -363,7 +363,34 @@ const MenuBar = ({ editor }: { editor: any }) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        editor.chain().focus().setImage({ src: result }).run();
+        
+        // Kompresi gambar via Canvas
+        const img = new window.Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          
+          const MAX_WIDTH = 800;
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            // Compress as JPEG 70% quality
+            const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+            editor.chain().focus().setImage({ src: compressedDataUrl }).run();
+          } else {
+            // Fallback if canvas fails
+            editor.chain().focus().setImage({ src: result }).run();
+          }
+        };
+        img.src = result;
       };
       reader.readAsDataURL(file);
     }
